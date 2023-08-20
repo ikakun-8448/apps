@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>話を聞いてくれないAI</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+      }
+      h1 {
+        color: #333;
+      }
+      .container {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+      }
+      input[type="submit"] {
+        background-color: #333;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+      }
+      .response {
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #f5f5f5;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>話を聞いてくれないAI</h1>
+      <form id="chat-form">
+        <input
+          type="text"
+          id="user-input"
+          placeholder="何か質問や指示を入力してください"
+        />
+        <input type="submit" value="送信" />
+      </form>
+      <div id="response-container" class="response"></div>
+    </div>
+
+    <script>
+      function handleFormSubmit(event) {
+        event.preventDefault();
+        const userInput = document.getElementById("user-input").value;
+
+        if (userInput.trim() === "") {
+          alert("何か入力してください！");
+          return;
+        }
+
+        const response = generateResponse(userInput);
+        displayResponse(response);
+
+        document.getElementById("user-input").value = "";
+      }
+
+      function generateResponse(userInput) {
+        const responses = [
+          "うんうん、それな！",
+          "えー、そんなことあるの？",
+          "なんかわかんないけど、それでいいんじゃない？",
+          "ふーん、それでどうなるの？",
+          "すごいね、なんかすごいこと言ってるね！",
+          "え、それってどういうこと？",
+        ];
+
+        const randomIndex = Math.floor(Math.random() * responses.length);
+        return responses[randomIndex];
+      }
+
+      function displayResponse(response) {
+        const responseContainer = document.getElementById("response-container");
+        responseContainer.innerHTML = response;
+      }
+
+      document
+        .getElementById("chat-form")
+        .addEventListener("submit", handleFormSubmit);
+    </script>
+  </body>
+</html>

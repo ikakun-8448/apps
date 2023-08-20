@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>シャボン割りゲーム</title>
+  <style>
+    #game-container {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .bubble {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background-color: #00aaff;
+      border-radius: 50%;
+      transition: transform 0.5s;
+    }
+  </style>
+</head>
+<body>
+  <div id="game-container"></div>
+
+  <audio id="pop-sound">
+    <source src="pop-sound.mp3" type="audio/mpeg">
+    <source src="pop-sound.ogg" type="audio/ogg">
+    <!-- サポートされていない場合の代替テキスト -->
+    Your browser does not support the audio element.
+  </audio>
+
+  <script>
+    const gameContainer = document.getElementById('game-container');
+    const popSound = document.getElementById('pop-sound');
+
+    // クリックイベントリスナーを追加
+    gameContainer.addEventListener('click', (event) => {
+      const clickedBubble = event.target;
+      if (clickedBubble.classList.contains('bubble')) {
+        popBubble(clickedBubble);
+        playPopSound();
+      }
+    });
+
+    // シャボン玉を割る処理
+    function popBubble(bubble) {
+      // シャボン玉を削除
+      bubble.remove();
+    }
+
+    // シャボン玉を作成する処理
+    function createBubble() {
+      const bubble = document.createElement('div');
+      bubble.classList.add('bubble');
+      setRandomPosition(bubble);
+      gameContainer.appendChild(bubble);
+
+      slideBubble(bubble);
+    }
+
+    // シャボン玉のランダムな位置を設定する関数
+    function setRandomPosition(element) {
+      const containerWidth = gameContainer.offsetWidth;
+      const containerHeight = gameContainer.offsetHeight;
+      const randomLeft = Math.floor(Math.random() * containerWidth);
+      const randomTop = Math.floor(Math.random() * containerHeight);
+      element.style.left = randomLeft + 'px';
+      element.style.top = randomTop + 'px';
+    }
+
+    // シャボン玉をスライドさせる処理
+    function slideBubble(bubble) {
+      const containerWidth = gameContainer.offsetWidth;
+      const containerHeight = gameContainer.offsetHeight;
+
+      const endPositionX = Math.floor(Math.random() * containerWidth);
+      const endPositionY = containerHeight;
+
+      const animationDuration = Math.floor(Math.random() * 5000) + 2000;
+
+      bubble.style.transition = `transform ${animationDuration}ms linear`;
+      bubble.style.transform = `translate(${endPositionX}px, ${endPositionY}px)`;
+
+      // アニメーションが終了したらシャボン玉を削除
+      bubble.addEventListener('transitionend', () => {
+        bubble.remove();
+        createBubble();
+      });
+    }
+
+    // シャボン玉を割ったときの音を再生する処理
+    function playPopSound() {
+      popSound.currentTime = 0;
+      popSound.play();
+    }
+
+    // 初期のシャボン玉を作成
+    const initialBubbles = Math.floor(window.innerWidth / 100) * 10;
+    for (let i = 0; i < initialBubbles; i++) {
+      createBubble();
+    }
+  </script>
+</body>
+</html>

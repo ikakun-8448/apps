@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>ランダム褒め言葉ジェネレーター</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background-color: #f1f1f1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      h1 {
+        color: #333;
+        margin-top: 30px;
+      }
+
+      .compliment {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+
+      .button-container {
+        margin-top: 20px;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #4caf50;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #45a049;
+      }
+
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 id="title">ランダム褒め言葉ジェネレーター</h1>
+    <div class="compliment" id="compliment"></div>
+    <div class="button-container">
+      <button id="startButton" onclick="startGenerator()">スタート</button>
+      <button id="pauseButton" onclick="pauseGenerator()" class="hidden">
+        一時停止
+      </button>
+      <button id="resumeButton" onclick="resumeGenerator()" class="hidden">
+        再開
+      </button>
+    </div>
+
+    <script>
+      var compliments = [
+        "あなたは素晴らしい人です。",
+        "あなたの笑顔は最高です。",
+        "あなたはとても頭が良いです。",
+        "あなたは他の人を励ます力を持っています。",
+        "あなたの努力は素晴らしいです。",
+        "あなたは才能にあふれています。",
+        "あなたは非常に才能のある人です。",
+        "あなたの努力と献身は素晴らしいです。",
+        "あなたのエネルギーは周りの人々を元気づけます。",
+        "あなたの創造性とアイデアは驚くべきものです。",
+        "あなたは信頼できるリーダーです。",
+        "あなたの優れたコミュニケーション能力は素晴らしいです。",
+        "あなたの勇気と決断力は称賛に値します。",
+        "あなたは素晴らしいチームプレイヤーです。",
+        "あなたの目標に対する情熱は見習うべきものです。",
+        "あなたは素晴らしい友人であり、支えとなってくれます。",
+      ];
+
+      var currentIndex = -1;
+      var speechQueue = [];
+      var isPaused = false;
+      var timeoutId;
+
+      function startGenerator() {
+        if (!isSpeechSynthesisSupported()) {
+          var compliment = document.getElementById("compliment");
+          compliment.textContent =
+            "音声合成が利用できるブラウザを利用してください。";
+          return;
+        }
+
+        var title = document.getElementById("title");
+        var startButton = document.getElementById("startButton");
+        var pauseButton = document.getElementById("pauseButton");
+        var resumeButton = document.getElementById("resumeButton");
+
+        title.classList.add("hidden"); // タイトル非表示
+        startButton.classList.add("hidden"); // スタートボタン非表示
+        pauseButton.classList.remove("hidden"); // 一時停止ボタン表示
+        resumeButton.classList.add("hidden"); // 再開ボタン非表示
+
+        generateCompliment(); // 最初の褒め言葉生成
+      }
+
+      function pauseGenerator() {
+        isPaused = true;
+
+        var pauseButton = document.getElementById("pauseButton");
+        var resumeButton = document.getElementById("resumeButton");
+
+        pauseButton.classList.add("hidden"); // 一時停止ボタン非表示
+        resumeButton.classList.remove("hidden"); // 再開ボタン表示
+
+        clearTimeout(timeoutId); // タイマーの停止
+        window.speechSynthesis.cancel(); // 読み上げのキャンセル
+      }
+
+      function resumeGenerator() {
+        isPaused = false;
+
+        var pauseButton = document.getElementById("pauseButton");
+        var resumeButton = document.getElementById("resumeButton");
+
+        pauseButton.classList.remove("hidden"); // 一時停止ボタン表示
+        resumeButton.classList.add("hidden"); // 再開ボタン非表示
+
+        speakCompliment();
+      }
+
+      function generateCompliment() {
+        currentIndex++;
+        if (currentIndex >= compliments.length) {
+          currentIndex = 0;
+        }
+
+        var compliment = document.getElementById("compliment");
+        compliment.textContent = compliments[currentIndex];
+        speakCompliment(compliments[currentIndex]);
+      }
+
+      function speakCompliment(compliment) {
+        var utterance = new SpeechSynthesisUtterance(compliment);
+        speechQueue.push(utterance);
+
+        if (!isPaused) {
+          playNextSpeech();
+        }
+      }
+
+      function playNextSpeech() {
+        if (speechQueue.length > 0) {
+          var utterance = speechQueue.shift();
+          utterance.onend = function () {
+            generateCompliment(); // 読み上げ完了後に次の褒め言葉を生成
+          };
+          window.speechSynthesis.speak(utterance);
+        }
+      }
+
+      function isSpeechSynthesisSupported() {
+        return "speechSynthesis" in window && window.speechSynthesis;
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Webhook送信機</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>
+      Webhook送信機<br>
+      <a href="en.html">English</a>
+    </h1>
+    <form id="webhookForm">
+      <label for="url">URL:</label>
+      <input type="url" id="url" name="url" required><br>
+
+      <label for="method">HTTPメソッド:</label>
+      <select id="method" name="method">
+        <option value="GET">GET</option>
+        <option value="POST">POST</option>
+        <option value="PUT">PUT</option>
+        <option value="DELETE">DELETE</option>
+      </select><br>
+
+      <label for="contentType">コンテンツタイプ:</label>
+      <select id="contentType" name="contentType">
+        <option value="application/json">application/json</option>
+        <option value="application/xml">application/xml</option>
+        <option value="text/plain">text/plain</option>
+        <option value="application/x-www-form-urlencoded">application/x-www-form-urlencoded</option>
+        <option value="multipart/form-data">multipart/form-data</option>
+      </select><br>
+
+      <label for="headers">追加ヘッダー:</label>
+      <textarea id="headers" name="headers" rows="4" cols="50"></textarea><br>
+
+      <label for="body">リクエストBody:</label>
+      <textarea id="body" name="body" rows="6" cols="50"></textarea><br>
+
+      <button type="submit">送信</button>
+    </form>
+    <div id="responseContainer"></div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

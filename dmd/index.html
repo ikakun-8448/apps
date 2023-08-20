@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>決断メーカー</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+  </head>
+  <body>
+    <h1>決断メーカー(Beta)</h1>
+
+    <div id="options-container">
+      <div class="input-container">
+        <label for="option">選択肢:</label>
+        <input type="text" class="option-input" required />
+        <button class="remove-button" onclick="removeOption(this)">×</button>
+      </div>
+    </div>
+
+    <button onclick="makeDecision()">選んでもらう</button>
+    <button class="add-button" onclick="addOption()">追加</button>
+
+    <div class="result-container">
+      <h2>結果</h2>
+      <p id="result" onclick="useResult()"></p>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
